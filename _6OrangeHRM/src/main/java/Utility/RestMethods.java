@@ -1,0 +1,37 @@
+package Utility;
+
+import io.restassured.response.Response;
+
+import java.util.HashMap;
+import java.util.Objects;
+
+import static io.restassured.RestAssured.given;
+
+public class RestMethods {
+     public Response doGet(String url){
+
+         Response rs = given().when().get(url).then().extract().response();
+         rs.prettyPrint();
+         return rs;
+     }
+    public Response doGetWithQueryParam(String url, HashMap<String, Object> parameters){
+
+        Response rs = given().formParams(parameters).when().get(url).then().extract().response();
+        rs.prettyPrint();
+        return rs;
+    }
+
+    public Response doPost(String url, String payload){
+
+        Response rs = given().body(payload).when().post(url).then().extract().response();
+        rs.prettyPrint();
+        return rs;
+    }
+
+    public Response doPostWithHashMap(String url, HashMap<String, Object> payload){
+
+        Response rs = given().body(payload).contentType("application/json").when().post(url).then().extract().response();
+        rs.prettyPrint();
+        return rs;
+    }
+}
