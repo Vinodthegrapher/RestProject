@@ -26,6 +26,7 @@ public class RestMethods {
         Response rs = given().body(payload).when().post(url).then().extract().response();
         rs.prettyPrint();
         return rs;
+        //
     }
 
     public Response doPostWithHashMap(String url, HashMap<String, Object> payload){
