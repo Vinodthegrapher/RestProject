@@ -35,4 +35,11 @@ public class RestMethods {
         rs.prettyPrint();
         return rs;
     }
+
+    public Response doPostWithPojo(String url, Object payload){
+
+        Response rs = given().body(payload).contentType("application/json").when().post(url).then().extract().response();
+        rs.prettyPrint();
+        return rs;
+    }
 }
