@@ -1,5 +1,6 @@
 package Utility;
 
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 import java.util.HashMap;
@@ -41,5 +42,11 @@ public class RestMethods {
         Response rs = given().body(payload).contentType("application/json").when().post(url).then().extract().response();
         rs.prettyPrint();
         return rs;
+    }
+
+    public Object getValuefromResponse(Response response, String path){
+        JsonPath jsonPath=response.jsonPath();
+        Object value=jsonPath.get(path);
+        return value;
     }
 }

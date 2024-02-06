@@ -6,6 +6,7 @@ import Pojo.AuthBody;
 import Pojo.CreateBooking;
 import  Utility.RestMethods;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -116,7 +117,14 @@ public class Bokker {
     public void createBookingWithPojo() throws IOException {
         String url = readProperties("domainName","demo")+readProperties("createBooking","demo");
         CreateBooking createBooking= new CreateBooking("Karan","Singh","lunch",225,true,"2024-02-04","2024-02-14");
-        rM.doPostWithPojo(url,createBooking);
+        Response rs=rM.doPostWithPojo(url,createBooking);
+        rM.getValuefromResponse(rs,"booking.firstname");
+        url=readProperties("domainName","demo")+readProperties("createBooking","demo")+"/"+rM.getValuefromResponse(rs,"bookingid");
+        System.out.println("***********************************************************************");
+        Response rs1=rM.doGet(url);
+        System.out.println(rM.getValuefromResponse(rs1,"totalprice"));
+
+
     }
 
 
