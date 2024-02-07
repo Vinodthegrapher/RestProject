@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Properties;
+import  org.testng.Assert;
 
 import static io.restassured.RestAssured.*;
 
@@ -33,14 +34,17 @@ public class Bokker {
     }
 
     public String generateAuthToken() throws IOException {
-        String token = "";
+
         String url = readProperties("domainName", "demo") + readProperties("generateAuthToken", "demo");
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", "admin");
         body.put("password", "password123");
         System.out.println(url);
         Response resp = rM.doPostWithHashMap(url, body);
+        String token = (String) rM.getValuefromResponse(resp,"token");
+
         return token;
+
     }
 
     public void createBooking() throws IOException {
@@ -116,15 +120,17 @@ public class Bokker {
 
     public void createBookingWithPojo() throws IOException {
         String url = readProperties("domainName","demo")+readProperties("createBooking","demo");
-        CreateBooking createBooking= new CreateBooking("Karan","Singh","lunch",225,true,"2024-02-04","2024-02-14");
-        Response rs=rM.doPostWithPojo(url,createBooking);
-        rM.getValuefromResponse(rs,"booking.firstname");
-        url=readProperties("domainName","demo")+readProperties("createBooking","demo")+"/"+rM.getValuefromResponse(rs,"bookingid");
-        System.out.println("***********************************************************************");
-        Response rs1=rM.doGet(url);
-        System.out.println(rM.getValuefromResponse(rs1,"totalprice"));
+        CreateBooking createBooking= new CreateBooking("Karan5","Singh4","lunch",225,true,"2024-02-04","2024-02-14");
 
 
+        String token=generateAuthToken();
+        System.out.println("*****************"+token+"*************************");
+        Response rs=rM.doPostWithPojoAndToken(url,createBooking,token);
+        System.out.println("***************** 3rd api*************************");
+        rs=rM.doGetWithToken(url+"/"+rM.getValuefromResponse(rs,"bookingid"),token);
+       Assert.assertEquals(rs.statusCode(),200);
+        Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan5");
+       // Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan3");
     }
 
 
@@ -163,7 +169,7 @@ public class Bokker {
 
     public static void main(String[] args) throws IOException {
         Bokker bK= new Bokker();
-       bK.createBookingWithPojo();
+      bK.createBookingWithPojo();
 
     }
 }

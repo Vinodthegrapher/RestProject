@@ -11,8 +11,6 @@ public class CreateBooking {
     private boolean depositpaid;
     private bookingdates bookingdates;
 
-    private ArrayList<String> mobileNumber;
-
 
 
     public CreateBooking(String firstname, String lastname, String additionalneeds, int totalprice, boolean depositpaid, String checkIn, String CheckOut) {
@@ -22,7 +20,6 @@ public class CreateBooking {
         this.totalprice = totalprice;
         this.depositpaid = depositpaid;
         this.bookingdates = new bookingdates(checkIn,CheckOut);
-        this.mobileNumber= new ArrayList<>();
     }
 
     public String getFirstname() {
@@ -64,16 +61,5 @@ public class CreateBooking {
     public void setDepositpaid(boolean depositpaid) {
         this.depositpaid = depositpaid;
     }
-
-    public void setMobileNumber(String... s) {
-        for(int i= 0; i<s.length;i++){
-            this.mobileNumber.add(s[i]);
-        }
-
-    }
-
-
-
-
 
 }
