@@ -1,7 +1,9 @@
 package Web._6OrangeHRMTestNg;
 
 import java.time.Duration;
+import java.util.HashMap;
 
+import Utility.Utilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -49,10 +51,11 @@ public class TestClass {
 	}
 	
 	
-	@Test 
+	@Test (dataProviderClass = Utilities.class ,dataProvider = "testData")
 	
-	public void veifyAddEmployeeFunctionalty() throws InterruptedException
+	public void veifyAddEmployeeFunctionalty(HashMap<String, String>testData ) throws InterruptedException
 	{
+		testData.get("name");
 		MenuIndex menuIndex = new MenuIndex(driver);
 		menuIndex.clickOnPIMTab();
 		

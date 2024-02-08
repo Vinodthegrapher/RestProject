@@ -5,6 +5,7 @@ import static Utility.Utilities.*;
 import Pojo.AuthBody;
 import Pojo.CreateBooking;
 import  Utility.RestMethods;
+import Utility.Utilities;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -33,9 +34,9 @@ public class Bokker {
 
     }
 
-    public String generateAuthToken() throws IOException {
+    public String generateAuthTokenforBooker() throws IOException {
 
-        String url = readProperties("domainName", "demo") + readProperties("generateAuthToken", "demo");
+        String url = readProperties("AmazonUrl", "demo") + readProperties("AmazonCreateBooking", "demo");
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", "admin");
         body.put("password", "password123");
@@ -46,6 +47,20 @@ public class Bokker {
         return token;
 
     }
+
+/*    public String () throws IOException {
+
+        String url = readProperties("AmazonUrl", "demo") + readProperties("AmazonCreateBooking", "demo");
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("username", "admin");
+        body.put("password", "password123");
+        System.out.println(url);
+        Response resp = rM.doPostWithHashMap(url, body);
+        String token = (String) rM.getValuefromResponse(resp,"token");
+
+        return token;
+
+    }*/
 
     public void createBooking() throws IOException {
   /*      String url = readProperties("domainName","demo")+readProperties("createBooking","demo");
@@ -65,20 +80,6 @@ public class Bokker {
         accounting1.put("firstName", "v");
         accounting1.put("lastName", "j");
         accounting1.put("age", "27");
-
-        JSONObject accounting1j = new JSONObject();
-        accounting1j.put("firstName", "radha");
-        accounting1j.put("lastName", "roshan");
-        accounting1j.put("age", 24);
-
-        JSONObject accounting2j = new JSONObject();
-        accounting2j.put("firstName", "radha1");
-        accounting2j.put("lastName", "roshan1");
-        accounting2j.put("age", 24);
-
-        JSONArray accountingj = new JSONArray();
-        accountingj.put(accounting1j);
-        accountingj.put(accounting2j);
 
         HashMap<String, Object> accounting2 = new HashMap<>();
         accounting2.put("firstName", "v");
@@ -106,7 +107,7 @@ public class Bokker {
         sales.add(sales2);
 
         HashMap<String, Object> body = new HashMap<>();
-        body.put("accounting", accountingj);
+        body.put("accounting", accounting);
         body.put("sales", sales);
 
     }
@@ -123,13 +124,13 @@ public class Bokker {
         CreateBooking createBooking= new CreateBooking("Karan5","Singh4","lunch",225,true,"2024-02-04","2024-02-14");
 
 
-        String token=generateAuthToken();
-        System.out.println("*****************"+token+"*************************");
-        Response rs=rM.doPostWithPojoAndToken(url,createBooking,token);
+        //String token=generateAuthToken();
+        //System.out.println("*****************"+token+"*************************");
+        //Response rs=rM.doPostWithPojoAndToken(url,createBooking,token);
         System.out.println("***************** 3rd api*************************");
-        rs=rM.doGetWithToken(url+"/"+rM.getValuefromResponse(rs,"bookingid"),token);
-       Assert.assertEquals(rs.statusCode(),200);
-        Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan5");
+        //=rM.doGetWithToken(url+"/"+rM.getValuefromResponse(rs,"bookingid"),token);
+       //Assert.assertEquals(rs.statusCode(),200);
+       // Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan5");
        // Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan3");
     }
 
@@ -168,8 +169,8 @@ public class Bokker {
     }
 
     public static void main(String[] args) throws IOException {
-        Bokker bK= new Bokker();
-      bK.createBookingWithPojo();
+        Utilities ut= new Utilities();
+        ut.readExcel("data1");
 
     }
 }

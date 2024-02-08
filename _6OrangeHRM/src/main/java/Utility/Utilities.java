@@ -2,10 +2,11 @@ package Utility;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,9 +18,34 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
+import org.testng.annotations.DataProvider;
 
 public class Utilities {
 
+
+	@DataProvider(name = "testData")
+	public static Object[][] readExcel(String fileName) throws IOException
+	{
+		FileInputStream file= new FileInputStream(System.getProperty("user.dir")+"\\src\\test\\resources\\TestData\\data1.xlsx");
+		Workbook workbook = WorkbookFactory.create(file);
+		Sheet sheet = workbook.getSheet("Sheet1");
+		int lastRowNum = sheet.getLastRowNum();
+		int lastCellNum=sheet.getRow(0).getLastCellNum();
+		Object[][] data = new Object[lastCellNum][1];
+		HashMap<String,String> hashData;
+		for(int i =1; i < lastRowNum; i++){
+			hashData=new HashMap<>();
+			for (int j= 0; j < lastCellNum; j++) {
+			String key= sheet.getRow(0).getCell(j).getStringCellValue();
+			String value=sheet.getRow(i).getCell(j).getStringCellValue();
+			hashData.put(key, value);
+			}
+			data[i-1][0]=hashData;
+		}
+
+		workbook.close();
+		return data;
+	}
 	public static String getDataFromExcelSheet(String filePath,String sheetName, int rowNo, int cellNo) throws IOException 
 	{
 		String data = "";
