@@ -2,6 +2,7 @@ package Utility;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -62,6 +63,13 @@ public class RestMethods {
     public Response doPostWithPojoAndToken(String url, Object payload, String token){
 
         Response rs = given().body(payload).auth().oauth2(token).contentType("application/json").when().post(url).then().extract().response();
+        rs.prettyPrint();
+        return rs;
+    }
+
+    public Response doPutWithJson(String url, JSONObject payload, String token){
+
+        Response rs = given().body(payload).auth().oauth2(token).contentType("application/json").when().put(url).then().extract().response();
         rs.prettyPrint();
         return rs;
     }

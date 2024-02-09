@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
+import groovyjarjarasm.asm.commons.Method;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -24,9 +25,9 @@ public class Utilities {
 
 
 	@DataProvider(name = "testData")
-	public static Object[][] readExcel(String fileName) throws IOException
+	public static Object[][] readExcel() throws IOException
 	{
-		FileInputStream file= new FileInputStream(System.getProperty("user.dir")+"\\src\\test\\resources\\TestData\\data1.xlsx");
+		FileInputStream file= new FileInputStream(System.getProperty("user.dir")+"\\src\\test\\resources\\TestData\\TestData.xlsx");
 		Workbook workbook = WorkbookFactory.create(file);
 		Sheet sheet = workbook.getSheet("Sheet1");
 		int lastRowNum = sheet.getLastRowNum();

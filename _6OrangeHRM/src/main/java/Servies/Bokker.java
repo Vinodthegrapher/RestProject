@@ -36,7 +36,7 @@ public class Bokker {
 
     public String generateAuthTokenforBooker() throws IOException {
 
-        String url = readProperties("AmazonUrl", "demo") + readProperties("AmazonCreateBooking", "demo");
+        String url = readProperties("domainName", "demo") + readProperties("generateAuthToken", "demo");
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", "admin");
         body.put("password", "password123");
@@ -48,9 +48,9 @@ public class Bokker {
 
     }
 
-/*    public String () throws IOException {
+   public String generateAuthToken() throws IOException {
 
-        String url = readProperties("AmazonUrl", "demo") + readProperties("AmazonCreateBooking", "demo");
+        String url = readProperties("domainName", "demo") + readProperties("generateAuthToken", "demo");
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", "admin");
         body.put("password", "password123");
@@ -60,7 +60,7 @@ public class Bokker {
 
         return token;
 
-    }*/
+    }
 
     public void createBooking() throws IOException {
   /*      String url = readProperties("domainName","demo")+readProperties("createBooking","demo");
@@ -119,58 +119,39 @@ public class Bokker {
         rM.doPostWithPojo(url,authBody);
     }
 
-    public void createBookingWithPojo() throws IOException {
-        String url = readProperties("domainName","demo")+readProperties("createBooking","demo");
-        CreateBooking createBooking= new CreateBooking("Karan5","Singh4","lunch",225,true,"2024-02-04","2024-02-14");
+    public void createBookingWithPojo(HashMap<String, String> testData) throws IOException {
+        String url = readProperties("domainName","demo")+readProperties("updateBooking","demo");
+        CreateBooking createBooking= new CreateBooking(testData.get("name"),testData.get("sname"),testData.get("depositpaid"),225,true,"2024-02-04","2024-02-14");
 
 
-        //String token=generateAuthToken();
-        //System.out.println("*****************"+token+"*************************");
-        //Response rs=rM.doPostWithPojoAndToken(url,createBooking,token);
+        String token=generateAuthToken();
+        System.out.println("*****************"+token+"*************************");
+        Response rs=rM.doPostWithPojoAndToken(url,createBooking,token);
         System.out.println("***************** 3rd api*************************");
-        //=rM.doGetWithToken(url+"/"+rM.getValuefromResponse(rs,"bookingid"),token);
-       //Assert.assertEquals(rs.statusCode(),200);
-       // Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan5");
-       // Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),"Karan3");
+        rs=rM.doGetWithToken(url+"/"+rM.getValuefromResponse(rs,"bookingid"),token);
+       Assert.assertEquals(rs.statusCode(),200);
+       Assert.assertEquals(rM.getValuefromResponse(rs,"firstname"),testData.get("name"));
+    }
+
+
+    public void updateBooking() throws IOException {
+        String url = readProperties("domainName","demo")+readProperties("updateBooking","demo")+"/685";
+        JSONObject updateBooking= new JSONObject();
+        updateBooking.put("firstname","Vinod");
+        updateBooking.put("lastname","Brown");
+        updateBooking.put("totalprice",111);
+        updateBooking.put("depositpaid",true);
+        updateBooking.put("additionalneeds","lunch");
+        JSONObject bookingdates= new JSONObject();
+        bookingdates.put("checkin","2024-02-06");
+        bookingdates.put("checkout","2024-02-31");
+        updateBooking.put("bookingdates",bookingdates);
+        String s= generateAuthTokenforBooker();
+        Response rs=rM.doPutWithJson(url,updateBooking, s);
+        System.out.println(rs.getStatusCode());
     }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void studentNames(String s, int... i){
-        System.out.println(i.length);
-        for(int j =0; j < i.length ; j++){
-            System.out.println(i[j]);
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        Utilities ut= new Utilities();
-        ut.readExcel("data1");
-
-    }
 }
